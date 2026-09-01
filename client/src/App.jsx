@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import Home from './pages/Home';
 import './App.css'
 import ProtectedRoute from './component/ProtectedRoute';
+import MyUrls from './pages/myUrls';
 
 const App=() => {
 
@@ -12,6 +13,8 @@ const App=() => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<ProtectedRoute> <Home/></ProtectedRoute>} />
+        <Route path="/myUrls" element={<ProtectedRoute> <MyUrls/></ProtectedRoute>} />
+
 
         <Route path="/signup" element={<Signup />} />
 

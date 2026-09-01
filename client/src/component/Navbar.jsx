@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MyUrls from "../pages/myUrls";
 
 const Navbar = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -38,7 +39,7 @@ const Navbar = () => {
           </button>
 
           <button
-            onClick={() => navigate("/urls")}
+            onClick={() => navigate("/MyUrls")}
             className="text-sm font-medium text-slate-600 hover:text-blue-600 hover:underline"
           >
             My URLs
@@ -79,7 +80,7 @@ const Navbar = () => {
                 </button>
 
                 <button
-                  onClick={() => navigate("/urls")}
+                  onClick={() => navigate("/myUrls")}
                   className="w-full text-left px-4 py-2 text-sm
                   text-slate-700 hover:bg-slate-50"
                 >
