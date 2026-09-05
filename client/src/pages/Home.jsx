@@ -1,8 +1,30 @@
 import { useState } from "react";
 import Navbar from "../component/Navbar";
+import axios from "axios";
 
 const Home = () => {
   const [url, setUrl] = useState("");
+  const handleShortenUrl = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.post(
+        "http://localhost:8080/api/urls",
+        {
+          url: url,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      console.log("URL CREATED:", response.data);
+    } catch (error) {
+      console.log("ERROR:", error.response?.data);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -56,6 +78,7 @@ const Home = () => {
 
               <button
                 type="button"
+                onClick={handleShortenUrl}
                 className="px-7 py-4 bg-blue-600 text-white
                 font-semibold rounded-xl hover:bg-blue-700
                 active:scale-95 transition"

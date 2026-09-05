@@ -53,6 +53,15 @@ const MyUrls = () => {
             className="w-full max-w-md px-4 py-3 border border-slate-300 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
+        <div className="mt-8">
+          {urls.map((url) => (
+            <div key={url._id}>
+              <p>{url.originalUrl}</p>
+              <p>{url.shortCode}</p>
+              <p>{url.clicks}</p>
+            </div>
+          ))}
+        </div>
 
         {loading && <p className="mt-8 text-slate-500">Loading URLs...</p>}
       </main>
