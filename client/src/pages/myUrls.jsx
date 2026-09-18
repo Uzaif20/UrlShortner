@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../component/Navbar";
+import EditUrlPopup from "../component/EditUrlPopup";
 
 const MyUrls = () => {
   const [search, setSearch] = useState("");
   const [urls, setUrls] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [editUrl, setEditUrl] = useState(null);
+  const [editValue, setEditValue] = useState("");
 
   useEffect(() => {
     const fetchUrls = async () => {
@@ -53,15 +56,45 @@ const MyUrls = () => {
       const token = localStorage.getItem("token");
       await axios.delete(`http://localhost:8080/api/urls/${shortCode}`, {
         headers: {
-          Authorization : `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
       });
-       setUrls((previousUrls) =>
-         previousUrls.filter((url) => url.shortCode !== shortCode),
-       );
-       alert("Short URL Deleted successfully!");
+      setUrls((previousUrls) =>
+        previousUrls.filter((url) => url.shortCode !== shortCode),
+      );
+      alert("Short URL Deleted successfully!");
     } catch (error) {
       console.log("DELETE ERROR:", error.response?.data);
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(
+        `http://localhost:8080/api/urls/${editUrl.shortCode}`,
+        {
+          url: editValue,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      console.log("UPDATED URL:", response.data);
+
+      // Update Url in Table
+      setUrls((previousUrls) =>
+        previousUrls.map((url) =>
+          url._id === response.data._id ? response.data : url,
+        ),
+      );
+
+       setEditUrl("");
+
+    } catch (error) {
+      console.log("UPDATE ERROR:", error.response?.data);
     }
   };
 
@@ -94,11 +127,13 @@ const MyUrls = () => {
         <div className="mt-8 bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
           {/* Header */}
           <div className="hidden md:grid grid-cols-12 gap-4 px-6 py-4 bg-slate-100 border-b border-slate-200 text-sm font-semibold text-slate-600">
-            <div className="col-span-6">Original URL</div>
+            <div className="col-span-5 ">Original URL</div>
 
-            <div className="col-span-3">Short URL</div>
+            <div className="col-span-3 px-10 ">Short URL</div>
 
-            <div className="col-span-3 text-center">Clicks</div>
+            <div className="col-span-2 text-center">Clicks</div>
+
+            <div className="col-span-2 text-center">Actions</div>
           </div>
 
           {/* Content */}
@@ -115,8 +150,8 @@ const MyUrls = () => {
                 className="grid grid-cols-1 md:grid-cols-12 gap-4 px-6 py-5 border-b border-slate-100 last:border-b-0 hover:bg-slate-50 transition"
               >
                 {/* Original URL */}
-                <div className="md:col-span-5">
-                  <p className="text-xs text-slate-400 mb-1 md:hidden">
+                <div className="md:col-span-5 items-center flex">
+                  <p className="text-xs text-slate-400 mb-1 md:hidden pr-5">
                     Original URL
                   </p>
 
@@ -131,11 +166,11 @@ const MyUrls = () => {
                 </div>
 
                 {/* Short Code */}
-                <div className="md:col-span-3">
-                  <p className="text-xs text-slate-400 mb-1 md:hidden">
+                <div className="md:col-span-3 items-center flex">
+                  <p className="text-xs text-slate-400 mb-1 md:hidden pr-5">
                     Short Code
                   </p>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 ">
                     <span className="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-sm font-medium">
                       {url.shortCode}
                     </span>
@@ -150,22 +185,25 @@ const MyUrls = () => {
                 </div>
 
                 {/* Clicks */}
-                <div className="md:col-span-2 md:text-center">
-                  <p className="text-xs text-slate-400 mb-1 md:hidden">
-                    Clicks
+                <div className="md:col-span-2 md:text-center   ">
+                  <p className="text-xs text-slate-400 mb-1 md:hidden pr-5">
+                    Clicks:
                   </p>
-                  <span className="text-sm font-semibold text-slate-700">
+                  <span className="text-sm font-semibold text-slate-700 ">
                     {url.clicks}
                   </span>
                 </div>
 
                 {/* Action */}
-                <div className="md:col-span-2 md:text-center gap-2 flex">
-                  <p className="text-xs text-slate-400 mb-1 md:hidden">
-                    Action
+                <div className="md:col-span-2 md:text-center items-center flex gap-2 ">
+                  <p className="text-xs text-slate-400 mb-1 md:hidden  pr-5">
+                    Action:
                   </p>
                   <button
-                    onClick={() => console.log("Edit:", url)}
+                    onClick={() => {
+                      setEditUrl(url);
+                      setEditValue(url.originalUrl);
+                    }}
                     className="px-3 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition"
                   >
                     ✏️ Edit
@@ -182,6 +220,14 @@ const MyUrls = () => {
             ))
           )}
         </div>
+        {editUrl && (
+          <EditUrlPopup
+            editValue={editValue}
+            setEditValue={setEditValue}
+            onClose={() => setEditUrl(null)}
+            onSave={handleUpdate}
+          />
+        )}
       </main>
     </div>
   );

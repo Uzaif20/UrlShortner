@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Navbar from "../component/Navbar";
 import axios from "axios";
+import { Navigate, redirect } from "react-router-dom";
 
 const Home = () => {
   const [url, setUrl] = useState("");
@@ -19,6 +20,9 @@ const Home = () => {
           },
         },
       );
+
+      setUrl("");
+      redirect(myUrls.jsx);
 
       console.log("URL CREATED:", response.data);
     } catch (error) {
