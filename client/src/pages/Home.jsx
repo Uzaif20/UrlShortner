@@ -2,9 +2,11 @@ import { useState } from "react";
 import Navbar from "../component/Navbar";
 import axios from "axios";
 import { Navigate, redirect } from "react-router-dom";
+import ShortUrlPopup from "../component/ShortUrlPopup";
 
 const Home = () => {
   const [url, setUrl] = useState("");
+  const [shortCode, setShortCode] = useState(null);
   const handleShortenUrl = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -22,8 +24,7 @@ const Home = () => {
       );
 
       setUrl("");
-      redirect(myUrls.jsx);
-
+      setShortCode(response.data.shortCode);
       console.log("URL CREATED:", response.data);
     } catch (error) {
       console.log("ERROR:", error.response?.data);
@@ -57,6 +58,10 @@ const Home = () => {
             clicks with ease.
           </p>
         </div>
+
+        {shortCode && <ShortUrlPopup 
+        shortCode={shortCode}
+        onClose={()=> setShortCode("")}/>}
 
         {/* URL Shortener Card */}
         <div className="max-w-3xl mx-auto">

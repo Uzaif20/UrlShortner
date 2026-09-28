@@ -40,6 +40,12 @@ const MyUrls = () => {
       url.shortCode.toLowerCase().includes(search.toLowerCase()),
   );
 
+  const totalUrls = urls.length;
+   const totalClicks = urls.reduce(
+    (total, urls) => total + urls.clicks,
+    0
+   );
+
   const handleCopy = async (shortCode) => {
     const shortUrl = `http://localhost:8080/${shortCode}`;
 
@@ -110,6 +116,26 @@ const MyUrls = () => {
           <p className="text-slate-500 mt-2">
             Manage and track all your shortened URLs.
           </p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-8">
+          {/* Total URLs */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+            <p className="text-sm text-slate-500">Total URLs</p>
+
+            <p className="text-3xl font-bold text-slate-900 mt-2">
+              {totalUrls}
+            </p>
+          </div>
+
+          {/* Total Clicks */}
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+            <p className="text-sm text-slate-500">Total Clicks</p>
+
+            <p className="text-3xl font-bold text-slate-900 mt-2">
+              {totalClicks}
+            </p>
+          </div>
         </div>
 
         {/* Search */}
