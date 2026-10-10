@@ -1,7 +1,9 @@
 
 import {Router} from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
-import {createShortUrl, deleteUrl, getAllUrl, getUrlByCode, redirectUrl, updateUrl} from "../controller/UrlController.js";
+import {createShortUrl, deleteUrl, 
+  getAllUrl, getUrlByCode, redirectUrl, updateUrl} 
+  from "../controller/UrlController.js";
 
 const router = Router();
 

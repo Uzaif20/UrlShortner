@@ -6,19 +6,37 @@ import Home from './pages/Home';
 import './App.css'
 import ProtectedRoute from './component/ProtectedRoute';
 import MyUrls from './pages/myUrls';
+import Profile from "./pages/Profile";
 
 const App=() => {
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<ProtectedRoute> <Home/></ProtectedRoute>} />
-        <Route path="/myUrls" element={<ProtectedRoute> <MyUrls/></ProtectedRoute>} />
-
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/myUrls"
+          element={
+            <ProtectedRoute>
+              {" "}
+              <MyUrls />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="/signup" element={<Signup />} />
 
         <Route path="/signin" element={<Signin />} />
+        <Route path="/profile" element={<Profile />} />
+        
       </Routes>
     </BrowserRouter>
   );

@@ -82,4 +82,26 @@ const signIn = async (req, res) =>{
   }
 }
 
-export { signUp, signIn };
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.userId }).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        msg: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.log("PROFILE ERROR:", error);
+
+    return res.status(500).json({
+      msg: "Internal Server Error",
+    });
+  }
+};
+
+export { signUp, signIn, getProfile };
